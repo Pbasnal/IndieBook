@@ -23,6 +23,14 @@ android {
     }
 }
 
+// Disable migration verification on Windows to avoid native library issues
+// SQLDelight migration verification requires native SQLite libraries that may not be available on Windows
+tasks.matching { it.name.startsWith("verify") && it.name.contains("Migration") }.configureEach {
+    onlyIf {
+        !System.getProperty("os.name").lowercase().contains("win")
+    }
+}
+
 kotlin {
     compilerOptions {
         freeCompilerArgs.add("-opt-in=kotlinx.serialization.ExperimentalSerializationApi")
